@@ -7,6 +7,8 @@ dotenv.config();
 module.exports = {
   // Export variable SERVICE_NAME
   serviceName: process.env.SERVICE_NAME,
+  // Secret key JWT
+  secretKey: process.env.SECRET_KEY,
   // Database config
   dbHost: process.env.DB_HOST,
   dbUser: process.env.DB_USER,

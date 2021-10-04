@@ -26,11 +26,11 @@ test("Ketika username yang dikirim form kosong", async () => {
   //  (2) Expectation return
   // (1) thrown error response must be `422 Unprocessable Entity`
   expect(response.statusCode).toBe(422);
-  //   (1) Thrown error body.field.full_name.message must be `Fullname harus diisi.`
+  //   (2) Thrown error body.field.full_name.message must be `Fullname harus diisi.`
   expect(res.full_name.message).toBe("Fullname harus diisi.");
-  //   (2) Thrown error body.field.username.message must be `Username harus diisi.`
+  //   (3) Thrown error body.field.username.message must be `Username harus diisi.`
   expect(res.username.message).toBe("Username harus diisi.");
-  // (3) Thrown error body.field.password.message must be `Password harus diisi.`
+  // (4) Thrown error body.field.password.message must be `Password harus diisi.`
   expect(res.password.message).toBe("Password harus diisi.");
 });
 
@@ -76,9 +76,8 @@ test("Proses register berhasil dengan role data 'admin'", async () => {
   expect(res.full_name).toBe(payload.full_name);
   //   (3) res.username must be "dwi"
   expect(res.username).toBe(payload.username);
-  //   (4) res.password must be "password"
-  //   expect(res.password).toBe("password");
-  //  (5) Password must be hash with bcrypt
+  //   (4) res.password must be bcrypt with check panjang password lebih dari password yang didaftarkan
+  expect(res.password.length).toBeGreaterThan(6);
   //   (6) res.role must be "admin"
   expect(res.role).toBe(payload.role);
 });
@@ -101,8 +100,8 @@ test("Proses register berhasil expect property role not fill", async () => {
   expect(res.full_name).toBe("Rizky Darmawan");
   //   (3) res.username must be "letenk"
   expect(res.username).toBe("letenk");
-  //   (4) res.password must be "password"
-  //   expect(res.password).toBe("password");
+  //   (4) res.password must be bcrypt with check panjang password lebih dari password yang didaftarkan
+  expect(res.password.length).toBeGreaterThan(6);
   //   (5) res.role must be "user" when role id not fill
   expect(res.role).toBe("user");
 });

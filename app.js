@@ -3,6 +3,7 @@ var express = require("express");
 var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
+const { decodeToken } = require("./app/auth/middleware");
 
 // Router
 // Index router
@@ -12,6 +13,8 @@ const authRouter = require("./app/auth/router");
 
 var app = express();
 
+// Use decode token
+app.use(decodeToken);
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "pug");
