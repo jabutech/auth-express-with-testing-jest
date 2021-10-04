@@ -3,7 +3,7 @@ const { getToken } = require("../utils/get-token");
 // Use jwt
 const jwt = require("jsonwebtoken");
 // Use config
-const { config } = require("dotenv");
+const config = require("../../config");
 // Use model user
 const User = require("../user/model");
 

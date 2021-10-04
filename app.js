@@ -14,7 +14,7 @@ const authRouter = require("./app/auth/router");
 var app = express();
 
 // Use decode token
-app.use(decodeToken);
+app.use(decodeToken());
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "pug");

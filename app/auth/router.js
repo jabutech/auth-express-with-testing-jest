@@ -18,6 +18,10 @@ passport.use(
 router.post("/register", multer().none(), authController.register);
 // endpoint login
 router.post("/login", multer().none(), authController.login);
+// endpoint me
+router.get("/me", authController.me);
+// endpoint logout
+router.get("/logout", authController.logout);
 
 // (4) export router
 module.exports = router;
