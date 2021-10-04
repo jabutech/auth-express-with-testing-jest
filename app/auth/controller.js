@@ -8,6 +8,8 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 // Use config
 const config = require("../../config");
+// Use get-token
+const { getToken } = require("../utils/get-token");
 
 // Export function
 module.exports = {
@@ -57,8 +59,8 @@ module.exports = {
       let user = await User
         // (b) Find username
         .findOne({ username })
-      // (c) Select field for display except this field
-      .select('-__v -token -createdAt -updatedAt');
+        // (c) Select field for display except this field
+        .select("-__v -token -createdAt -updatedAt");
 
       // (2) If user not found, end process login, and send error
       if (!user) return done();
@@ -123,5 +125,51 @@ module.exports = {
         token: newToken,
       });
     })(req, res, next);
+  },
+
+  // Function `me` for handle user login information
+  me: (req, res, next) => {
+    // (1) Jika req.user tidak memiliki data dan token,
+    // didalam req user ada token yang sudah dibuat pada file middleware
+    if (!req.user) {
+      // Retrun error
+      return res.json({
+        error: 1,
+        message: `Your're not login or token expired`,
+      });
+    }
+
+    // Jika data return data user
+    return res.json(req.user);
+  },
+
+  // Function logout
+  logout: async (req, res, next) => {
+    // (1) Get token user which login
+    let token = getToken(req);
+
+    // (2) Delete `token` from document `User` terkait
+    let user = await User.findOneAndUpdate(
+      { token: { $in: [token] } },
+      { $pull: { token } },
+      { useFindAndModify: false }
+    );
+
+    // (3) check user or token
+    // If user or token not found
+    if (!user || !token) {
+      // Return response to client
+      return res.json({
+        error: 1,
+        message: "No user found",
+      });
+    }
+
+    // (4) If token has been deleted / logout successfully
+    // Return response to client
+    return res.json({
+      error: 0,
+      message: "Logout Successfully",
+    });
   },
 };
